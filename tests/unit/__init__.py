@@ -6,4 +6,4 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""Unit tests for vutils.validator."""
+"""Unit tests for `vutils.validator`."""
