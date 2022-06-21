@@ -1,4 +1,4 @@
-#                                                         -*- coding: utf-8 -*-
+#
 # File:    ./tests/unit/test_coverage.py
 # Author:  Jiří Kučera <sanczes AT gmail.com>
 # Date:    2022-06-03 14:08:55 +0200
