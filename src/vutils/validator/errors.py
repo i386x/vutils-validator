@@ -1,4 +1,4 @@
-#                                                         -*- coding: utf-8 -*-
+#
 # File:    ./src/vutils/validator/errors.py
 # Author:  Jiří Kučera <sanczes AT gmail.com>
 # Date:    2022-05-29 21:45:41 +0200
