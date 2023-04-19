@@ -6,7 +6,11 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""Basic validation."""
+"""
+Basic validation.
+
+:const EMAIL_RE: The simple regular expression matching email address
+"""
 
 import re
 from typing import TYPE_CHECKING
@@ -16,15 +20,15 @@ from vutils.validator.errors import ValidationError
 if TYPE_CHECKING:
     from vutils.validator.value import ValueHolder
 
-EMAIL_RE = r"^\S+@\S+\.[A-Za-z]+$"
+EMAIL_RE: str = r"^\S+@\S+\.[A-Za-z]+$"
 
 
 def verify_not_empty(value: "ValueHolder | str") -> None:
     """
-    Verify that value is not empty.
+    Verify that :arg:`value` is not empty.
 
     :param value: The value to be verified
-    :raises ValidationError: when verification fails
+    :raises ~vutils.validator.errors.ValidationError: when verification fails
     """
     if len(str(value)) == 0:
         raise ValidationError("must not be empty!", value)
@@ -34,12 +38,12 @@ def verify_matches(
     value: "ValueHolder | str", regex: str, detail: str = ""
 ) -> None:
     """
-    Verify that value matches the regular expression.
+    Verify that :arg:`value` matches the regular expression.
 
     :param value: The value to be verified
     :param regex: The regular expression
     :param detail: The error detail (default is ``must match `{regex}`!``)
-    :raises ValidationError: when verification fails
+    :raises ~vutils.validator.errors.ValidationError: when verification fails
     """
     if not re.match(regex, str(value)):
         raise ValidationError(detail or f"must match `{regex}`!", value)
@@ -47,9 +51,9 @@ def verify_matches(
 
 def verify_email(value: "ValueHolder | str") -> None:
     """
-    Verify that value is an email address.
+    Verify that :arg:`value` is an email address.
 
     :param value: The value to be verified
-    :raises ValidationError: when verification fails
+    :raises ~vutils.validator.errors.ValidationError: when verification fails
     """
     verify_matches(value, EMAIL_RE, "must be an email address!")

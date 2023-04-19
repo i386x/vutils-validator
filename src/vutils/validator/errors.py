@@ -12,8 +12,15 @@ from vutils.validator.value import ValueHolder
 
 
 class ValidationError(Exception):
-    """Used to report failed checks."""
+    """
+    Used to report failed checks.
 
+    :ivar message: The reason of the error
+    :ivar value: The value that issued the error
+    """
+
+    message: str
+    value: ValueHolder
     __slots__ = ("message", "value")
 
     def __init__(self, message: str, value: "ValueHolder | str") -> None:
@@ -39,7 +46,7 @@ class ValidationError(Exception):
 
     def __str__(self) -> str:
         """
-        Get the error representation (`str` alias).
+        Get the error representation (:class:`str` alias).
 
         :return: the error representation
         """

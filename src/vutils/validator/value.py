@@ -15,8 +15,17 @@ if TYPE_CHECKING:
 
 
 class Location:
-    """Hold value/token location."""
+    """
+    Hold the token's location.
 
+    :ivar path: The path to the token's origin
+    :ivar line: The line number of the token's origin
+    :ivar column: The column number of the token's origin
+    """
+
+    path: "str | pathlib.Path | None"
+    line: int
+    column: int
     __slots__ = ("path", "line", "column")
 
     def __init__(
@@ -28,9 +37,9 @@ class Location:
         """
         Initialize the location.
 
-        :param path: The path to the file of the value/token origin
-        :param line: The line number of the value/token origin
-        :param column: The column number of the value/token origin
+        :param path: The path to the file of the token's origin
+        :param line: The line number of the token's origin
+        :param column: The column number of the token's origin
         """
         self.path = path
         self.line = line
@@ -38,14 +47,14 @@ class Location:
 
     def __str__(self) -> str:
         """
-        Give the string representation of the value/token location.
+        Give the string representation of the token's location.
 
-        :return: the value/token location as a `str` object
+        :return: the token's location as a :class:`str` object
 
         Location is of the form ``{path}:{line}:{column}``, where ``path``,
-        ``line``, and ``column`` are omitted together with redundant ``:`` if
-        they are `None`, negative, and negative, respectively. If ``line`` is
-        negative and ``column`` is not, the result is ``{path}:?:{column}``.
+        ``line``, and ``column`` are omitted, together with redundant ``:``, if
+        they are :obj:`None`, negative, and negative, respectively. If ``line``
+        is negative and ``column`` is not, the result is ``{path}:?:{column}``.
         """
         location: str = ""
         if self.path is not None:
@@ -64,8 +73,17 @@ class Location:
 
 
 class ValueHolder:
-    """Hold value with its context."""
+    """
+    Hold a value together with its context.
 
+    :ivar value: The value
+    :ivar name: The name of the value to be displayed in messages
+    :ivar location: The location of the value's origin
+    """
+
+    value: str
+    name: str
+    location: "Location | None"
     __slots__ = ("value", "name", "location")
 
     def __init__(
@@ -79,7 +97,7 @@ class ValueHolder:
 
         :param value: The value
         :param name: The name of the value
-        :param location: The location of the value origin
+        :param location: The location of the value's origin
         """
         self.value = value
         self.name = name
@@ -100,8 +118,8 @@ class ValueHolder:
         :param message: The message
         :return: detail information about the value
 
-        Add the value location if present and the value name to *message* so
-        the final form is ``{location}: {name} {message}``.
+        Add the value's location if present and the value's name to
+        :arg:`message` so the final form is ``{location}: {name} {message}``.
         """
         location: str = str(self.location)
 

@@ -6,7 +6,14 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""Test `vutils.validator.basic` module."""
+"""
+Test :mod:`vutils.validator.basic` module.
+
+.. |verify_not_empty| replace::
+   :func:`~vutils.validator.basic.verify_not_empty`
+.. |verify_matches| replace:: :func:`~vutils.validator.basic.verify_matches`
+.. |verify_email| replace:: :func:`~vutils.validator.basic.verify_email`
+"""
 
 from vutils.testing.testcase import TestCase
 
@@ -25,7 +32,7 @@ class BasicValidationTestCase(TestCase):
     __slots__ = ()
 
     def test_verify_not_empty(self):
-        """Test `verify_not_empty`."""
+        """Test |verify_not_empty|."""
         self.do_test(verify_not_empty, ("",), "The value must not be empty!")
         self.do_test(
             verify_not_empty,
@@ -35,7 +42,7 @@ class BasicValidationTestCase(TestCase):
         self.do_test(verify_not_empty, ("foo",), None)
 
     def test_verify_matches(self):
-        """Test `verify_matches`."""
+        """Test |verify_matches|."""
         regex = r"^[_A-Za-z][_0-9A-Za-z]*$"
 
         self.do_test(
@@ -54,7 +61,7 @@ class BasicValidationTestCase(TestCase):
         self.do_test(verify_matches, ("_foo", regex), None)
 
     def test_verify_email(self):
-        """Test `verify_email`."""
+        """Test |verify_email|."""
         self.do_test(
             verify_email, ("foo@bar",), "The value must be an email address!"
         )
@@ -73,10 +80,10 @@ class BasicValidationTestCase(TestCase):
         :param args: The validation function arguments
         :param result: The expected result
 
-        Expected result set to `None` signals that the validation function
+        Expected result set to :obj:`None` signals that the validation function
         should not raise an exception. Otherwise the validation function should
-        raise `ValidationError` and its representation should match the
-        expected result.
+        raise :exc:`~vutils.validator.errors.ValidationError` and its
+        representation should match the expected result.
         """
         if result is None:
             func(*args)
