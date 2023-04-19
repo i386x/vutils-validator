@@ -6,6 +6,10 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""Holds `vutils.validator` version."""
+"""
+Holds :mod:`vutils.validator` version.
+
+:const __version__: The package version
+"""
 
 __version__: str = "0.1.1"

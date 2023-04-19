@@ -6,7 +6,11 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""Test `vutils.validator.errors` module."""
+"""
+Test :mod:`vutils.validator.errors` module.
+
+.. |ValidationError| replace:: :exc:`~vutils.validator.errors.ValidationError`
+"""
 
 from vutils.testing.testcase import TestCase
 
@@ -15,12 +19,12 @@ from vutils.validator.value import Location, ValueHolder
 
 
 class ValidationErrorTestCase(TestCase):
-    """Test case for `ValidationError`."""
+    """Test case for |ValidationError|."""
 
     __slots__ = ()
 
     def test_validation_error(self):
-        """Test `ValidationError`."""
+        """Test |ValidationError|."""
         self.do_test("must be 123", "321", "The value must be 123")
         self.do_test(
             "must be 123",
@@ -30,7 +34,7 @@ class ValidationErrorTestCase(TestCase):
 
     def do_test(self, message, value, result):
         """
-        Do the `ValidationError` test.
+        Do the |ValidationError| test.
 
         :param message: The message
         :param value: The value

@@ -6,4 +6,4 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""`vutils.validator` package."""
+""":mod:`vutils.validator` package."""

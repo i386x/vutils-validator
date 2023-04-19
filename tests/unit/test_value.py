@@ -6,7 +6,18 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""Test `vutils.validator.value` module."""
+"""
+Test :mod:`vutils.validator.value` module.
+
+.. |Location| replace:: :class:`~vutils.validator.value.Location`
+.. |Location.__str__| replace::
+   :meth:`~vutils.validator.value.Location.__str__`
+.. |ValueHolder| replace:: :class:`~vutils.validator.value.ValueHolder`
+.. |ValueHolder.__str__| replace::
+   :meth:`~vutils.validator.value.ValueHolder.__str__`
+.. |ValueHolder.detail| replace::
+   :meth:`~vutils.validator.value.ValueHolder.detail`
+"""
 
 from vutils.testing.testcase import TestCase
 
@@ -14,7 +25,7 @@ from vutils.validator.value import Location, ValueHolder
 
 
 class LocationTestCase(TestCase):
-    """Test case for `Location`."""
+    """Test case for |Location|."""
 
     __slots__ = ()
 
@@ -22,7 +33,7 @@ class LocationTestCase(TestCase):
         """
         Test initialization.
 
-        Test `Location` object initialization with default values.
+        Test |Location| object initialization with default values.
         """
         location = Location()
 
@@ -34,7 +45,7 @@ class LocationTestCase(TestCase):
         """
         Test initialization.
 
-        Test `Location` object initialization with custom values.
+        Test |Location| object initialization with custom values.
         """
         path, line, column = "./foo.py", 42, 7
         location = Location(path, line, column)
@@ -44,7 +55,7 @@ class LocationTestCase(TestCase):
         self.assertEqual(location.column, column)
 
     def test_to_str_conversion(self):
-        """Test `Location.__str__`."""
+        """Test |Location.__str__|."""
         testset = [
             ((), ""),
             (("./foo.bar", -1, -1), "./foo.bar"),
@@ -61,7 +72,7 @@ class LocationTestCase(TestCase):
 
 
 class ValueHolderTestCase(TestCase):
-    """Test case for `ValueHolder`."""
+    """Test case for |ValueHolder|."""
 
     __slots__ = ()
 
@@ -69,7 +80,7 @@ class ValueHolderTestCase(TestCase):
         """
         Test initialization.
 
-        Test `ValueHolder` object initialization with default values.
+        Test |ValueHolder| object initialization with default values.
         """
         value = "quux"
         holder = ValueHolder(value)
@@ -82,7 +93,7 @@ class ValueHolderTestCase(TestCase):
         """
         Test initialization.
 
-        Test `ValueHolder` object initialization with custom values.
+        Test |ValueHolder| object initialization with custom values.
         """
         value, name, location = "baz", "foo", Location()
         holder = ValueHolder(value, name, location)
@@ -92,7 +103,7 @@ class ValueHolderTestCase(TestCase):
         self.assertIs(holder.location, location)
 
     def test_value_extraction(self):
-        """Test `ValueHolder.__str__`."""
+        """Test |ValueHolder.__str__|."""
         value = "foobar"
         holder = ValueHolder(value)
 
@@ -100,7 +111,7 @@ class ValueHolderTestCase(TestCase):
         self.assertEqual(str(holder), holder.value)
 
     def test_detail(self):
-        """Test `ValueHolder.detail`."""
+        """Test |ValueHolder.detail|."""
         testset = [
             (("baz",), "is bad", "The value is bad"),
             (("baz", "foo"), "is bad", "foo is bad"),
