@@ -11,12 +11,12 @@ Test :mod:`vutils.validator.value` module.
 
 .. |Location| replace:: :class:`~vutils.validator.value.Location`
 .. |Location.__str__| replace::
-   :meth:`~vutils.validator.value.Location.__str__`
+   :meth:`Location.__str__ <vutils.validator.value.Location.__str__>`
 .. |ValueHolder| replace:: :class:`~vutils.validator.value.ValueHolder`
 .. |ValueHolder.__str__| replace::
-   :meth:`~vutils.validator.value.ValueHolder.__str__`
+   :meth:`ValueHolder.__str__ <vutils.validator.value.ValueHolder.__str__>`
 .. |ValueHolder.detail| replace::
-   :meth:`~vutils.validator.value.ValueHolder.detail`
+   :meth:`ValueHolder.detail <vutils.validator.value.ValueHolder.detail>`
 """
 
 from vutils.testing.testcase import TestCase
