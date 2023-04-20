@@ -12,4 +12,4 @@ Holds :mod:`vutils.validator` version.
 :const __version__: The package version
 """
 
-__version__: str = "0.1.2"
+__version__: str = "0.1.3"
