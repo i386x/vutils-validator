@@ -26,6 +26,7 @@ class Location:
     path: "str | pathlib.Path | None"
     line: int
     column: int
+
     __slots__ = ("path", "line", "column")
 
     def __init__(
@@ -84,6 +85,7 @@ class ValueHolder:
     value: str
     name: str
     location: "Location | None"
+
     __slots__ = ("value", "name", "location")
 
     def __init__(

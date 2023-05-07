@@ -21,6 +21,7 @@ class ValidationError(Exception):
 
     message: str
     value: ValueHolder
+
     __slots__ = ("message", "value")
 
     def __init__(self, message: str, value: "ValueHolder | str") -> None:
