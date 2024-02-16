@@ -58,3 +58,10 @@ except ValidationError as exc:
 
 On ill-formed input, the example prints `email must be an email address!`,
 since `get_input` names a value as `email`.
+
+### Schema Validation
+
+Module `vutils.validator.schema` provides function `validate(data, schema)` for
+`data` validation against JSON schema `schema`. Function returns `None` in case
+of valid `data` or list of `jsonschema.exceptions.{Validation,Schema}Error` in
+case of invalid `data` or `schema`.
