@@ -12,14 +12,11 @@ from vutils.validator.value import ValueHolder
 
 
 class ValidationError(Exception):
-    """
-    Used to report failed checks.
+    """Used to report failed checks."""
 
-    :ivar message: The reason of the error
-    :ivar value: The value that issued the error
-    """
-
+    #: The reason of the error
     message: str
+    #: The value that issued the error
     value: ValueHolder
 
     __slots__ = ("message", "value")

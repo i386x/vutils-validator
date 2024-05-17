@@ -15,16 +15,13 @@ if TYPE_CHECKING:
 
 
 class Location:
-    """
-    Hold the token's location.
+    """Hold the token's location."""
 
-    :ivar path: The path to the token's origin
-    :ivar line: The line number of the token's origin
-    :ivar column: The column number of the token's origin
-    """
-
+    #: The path to the token's origin
     path: "str | pathlib.Path | None"
+    #: The line number of the token's origin
     line: int
+    #: The column number of the token's origin
     column: int
 
     __slots__ = ("path", "line", "column")
@@ -74,16 +71,13 @@ class Location:
 
 
 class ValueHolder:
-    """
-    Hold a value together with its context.
+    """Hold a value together with its context."""
 
-    :ivar value: The value
-    :ivar name: The name of the value to be displayed in messages
-    :ivar location: The location of the value's origin
-    """
-
+    #: The value
     value: str
+    #: The name of the value to be displayed in messages
     name: str
+    #: The location of the value's origin
     location: "Location | None"
 
     __slots__ = ("value", "name", "location")

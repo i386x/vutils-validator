@@ -9,11 +9,6 @@
 """
 Test :mod:`vutils.validator.schema` module.
 
-:const SCHEMA: The schema sample
-:const BAD_SCHEMA: The invalid schema sample
-:const DATA: The data sample
-:const BAD_DATA: The invalid data sample
-
 .. |validate| replace:: :func:`~vutils.validator.schema.validate`
 """
 
@@ -23,6 +18,7 @@ from vutils.validator.schema import validate
 
 from .utils import getloc, setloc
 
+#: The schema sample
 SCHEMA = {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "https://github.com/i386x/vutils-validator/tests/unit/schema",
@@ -49,6 +45,7 @@ SCHEMA = {
     "additionalProperties": False,
 }
 
+#: The invalid schema sample
 BAD_SCHEMA = setloc(
     1,
     1,
@@ -65,11 +62,13 @@ BAD_SCHEMA = setloc(
     },
 )
 
+#: The data sample
 DATA = {
     "message-type": "error",
     "color": "red",
 }
 
+#: The invalid data sample
 BAD_DATA = setloc(
     1,
     1,

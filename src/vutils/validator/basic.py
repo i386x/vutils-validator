@@ -6,11 +6,7 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""
-Basic validation.
-
-:const EMAIL_RE: The simple regular expression matching email address
-"""
+"""Basic validation."""
 
 import re
 from typing import TYPE_CHECKING
@@ -20,6 +16,7 @@ from vutils.validator.errors import ValidationError
 if TYPE_CHECKING:
     from vutils.validator.value import ValueHolder
 
+#: The simple regular expression matching email address
 EMAIL_RE: str = r"^\S+@\S+\.[A-Za-z]+$"
 
 

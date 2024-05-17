@@ -6,14 +6,11 @@
 #
 # SPDX-License-Identifier: MIT
 #
-"""
-Unit tests utilities.
-
-:const SLOT: The name of slot where a location is stored
-"""
+"""Unit tests utilities."""
 
 from vutils.validator.value import Location
 
+#: The name of slot where a location is stored
 SLOT = "__location__"
 
 
