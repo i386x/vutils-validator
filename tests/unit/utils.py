@@ -44,3 +44,15 @@ def getloc(value):
         with :arg:`value`, if any, or :obj:`None`
     """
     return getattr(value, SLOT, None)
+
+
+def withloc(error):
+    """
+    Extend an error message about its location.
+
+    :param error: The error
+    :return: the error message obtained from :arg:`error` extended about the
+        location of its occurrence
+    """
+    location = getloc(error.instance)
+    return f"{location!s}: {error!s}" if location else f"{error!s}"

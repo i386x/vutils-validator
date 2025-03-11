@@ -9,14 +9,80 @@
 """
 Test :mod:`vutils.validator.schema` module.
 
+.. |new_object| replace:: :func:`~vutils.validator.schema.new_object`
+.. |to_schema| replace:: :func:`~vutils.validator.schema.to_schema`
+.. |new_ref| replace:: :func:`~vutils.validator.schema.new_ref`
+.. |ensure_ref| replace:: :func:`~vutils.validator.schema.ensure_ref`
+.. |get_description| replace:: :func:`~vutils.validator.schema.get_description`
 .. |validate| replace:: :func:`~vutils.validator.schema.validate`
+.. |check_schema| replace:: :func:`~vutils.validator.schema.check_schema`
+.. |copy_and_check_schema| replace::
+   :func:`~vutils.validator.schema.copy_and_check_schema`
 """
 
 from vutils.testing.testcase import TestCase
 
-from vutils.validator.schema import validate
+from vutils.validator.schema import (
+    DRAFT7_ID,
+    KW_ADDITIONAL_PROPERTIES,
+    KW_DEFINITIONS,
+    KW_DESCRIPTION,
+    KW_OBJECT,
+    KW_PROPERTIES,
+    KW_REQUIRED,
+    KW_SCHEMA,
+    KW_TYPE,
+    check_schema,
+    copy_and_check_schema,
+    ensure_ref,
+    get_description,
+    new_object,
+    new_ref,
+    new_schema,
+    to_schema,
+    validate,
+)
 
-from .utils import getloc, setloc
+from .utils import setloc, withloc
+
+#: The (non-existing) schema identifier used by tests
+DRAFTX_ID = "http://json-schema.org/draftx/schema#"
+
+#: The schema definitions sample
+DEFINITIONS = {
+    "first": "#/definitions/first",
+    "second": "#/definitions/second",
+}
+
+#: The sample reference name
+REF = "color"
+
+#: The sample description
+DESCRIPTION = "A color definition"
+
+#: The sample subschema
+SUBSCHEMA = {
+    "type": "object",
+    "properties": {
+        "red": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "green": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255,
+        },
+        "blue": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255,
+        },
+    },
+    "required": ["red", "green", "blue"],
+    "additionalProperties": False,
+}
 
 #: The schema sample
 SCHEMA = {
@@ -62,6 +128,24 @@ BAD_SCHEMA = setloc(
     },
 )
 
+#: Another invalid schema sample
+MORE_BAD_SCHEMA = setloc(
+    1,
+    1,
+    {
+        setloc(2, 5, "$schema"): setloc(
+            2, 16, "http://json-schema.org/draft-07/schema#"
+        ),
+        setloc(3, 5, "$id"): setloc(
+            3,
+            12,
+            "https://github.com/i386x/vutils-validator/tests/unit/bad-schema",
+        ),
+        setloc(4, 5, "type"): setloc(4, 13, "objectx"),
+        setloc(5, 5, "properties"): setloc(5, 19, "string"),
+    },
+)
+
 #: The data sample
 DATA = {
     "message-type": "error",
@@ -81,20 +165,77 @@ BAD_DATA = setloc(
 )
 
 
-def withloc(error):
-    """
-    Extend an error message about its location.
+class AssemblingSchemaTestCase(TestCase):
+    """Test case for schema assembling functions."""
 
-    :param error: The error
-    :return: the error message obtained from :arg:`error` extended about the
-        location of its occurrence
-    """
-    location = getloc(error.instance)
-    return f"{location!s}: {error!s}" if location else f"{error!s}"
+    __slots__ = ()
+
+    def test_object_schema_has_proper_fields(self):
+        """Test that |new_object| creates subschema with proper fields."""
+        schema = new_object()
+        self.assertEqual(len(schema), 4)
+        self.assertIn(KW_TYPE, schema)
+        self.assertEqual(schema[KW_TYPE], KW_OBJECT)
+        self.assertIn(KW_PROPERTIES, schema)
+        self.assertIn(KW_REQUIRED, schema)
+        self.assertIn(KW_ADDITIONAL_PROPERTIES, schema)
+        self.assertFalse(schema[KW_ADDITIONAL_PROPERTIES])
+
+    def test_to_schema_completes_the_schema(self):
+        """Test that |to_schema| converts subschema to schema."""
+        # `new_schema` performs `to_schema(new_object())`
+        schema = new_schema()
+        self.assertEqual(len(schema), 6)
+        self.assertIn(KW_SCHEMA, schema)
+        self.assertEqual(schema[KW_SCHEMA], DRAFT7_ID)
+        self.assertIn(KW_DEFINITIONS, schema)
+
+    def test_to_schema_not_overrides(self):
+        """
+        Test that |to_schema| keeps user-defined values.
+
+        Test that |to_schema| do not overrides ``$schema`` and ``definitions``
+        if they were set previously.
+        """
+        schema = new_object()
+        schema[KW_SCHEMA] = DRAFTX_ID
+        schema[KW_DEFINITIONS] = DEFINITIONS
+        schema = to_schema(schema)
+
+        self.assertEqual(schema[KW_SCHEMA], DRAFTX_ID)
+        self.assertEqual(schema[KW_DEFINITIONS], DEFINITIONS)
+
+    def test_new_ref(self):
+        """Test that |new_ref| creates a reference."""
+        self.assertEqual(new_ref(REF), f"#/definitions/{REF}")
+
+    def test_ensure_ref(self):
+        """Test that |ensure_ref| ensures a reference."""
+        schema = new_schema()
+        self.assertNotIn(REF, schema[KW_DEFINITIONS])
+
+        ensure_ref(schema, REF, SUBSCHEMA)
+        self.assertEqual(schema[KW_DEFINITIONS][REF], SUBSCHEMA)
+
+    def test_ensure_ref_not_overrides(self):
+        """Test that |ensure_ref| keeps an already existing reference."""
+        schema = new_schema()
+        ensure_ref(schema, REF, SUBSCHEMA)
+        ensure_ref(schema, REF, new_object())
+
+        self.assertEqual(schema[KW_DEFINITIONS][REF], SUBSCHEMA)
+
+    def test_get_description(self):
+        """Test |get_description|."""
+        schema = new_object()
+        self.assertIsNone(get_description(schema))
+
+        schema[KW_DESCRIPTION] = DESCRIPTION
+        self.assertEqual(get_description(schema), DESCRIPTION)
 
 
-class ValidateTestCase(TestCase):
-    """Test case for |validate|."""
+class SchemaValidationTestCase(TestCase):
+    """Test case for schema validation functions."""
 
     __slots__ = ()
 
@@ -118,5 +259,43 @@ class ValidateTestCase(TestCase):
         errors = validate(DATA, BAD_SCHEMA)
 
         self.assertIsNotNone(errors)
+        self.assertEqual(len(errors), 1)
+        self.assertRegex(withloc(errors[0]), "^4:13: 'objectx' is not valid")
+
+    def test_check_schema_with_valid_schema(self):
+        """Test |check_schema| with a valid schema."""
+        self.assertIsNone(check_schema(SCHEMA))
+
+    def test_check_schema_with_invalid_schema(self):
+        """Test |check_schema| with an invalid schema."""
+        errors = check_schema(MORE_BAD_SCHEMA)
+
+        self.assertIsNotNone(errors)
+        self.assertEqual(len(errors), 1)
+        self.assertRegex(withloc(errors[0]), "^5:19: 'string' is not of type")
+
+    def test_copy_and_check_schema_with_valid_subschema(self):
+        """Test |copy_and_check_schema| with a valid subschema."""
+        schema = new_object()
+        result = copy_and_check_schema(schema)
+
+        self.assertIsInstance(result, type(schema))
+        self.assertIsNot(result, schema)
+        self.assertNotEqual(result, schema)
+
+    def test_copy_and_check_schema_with_valid_schema(self):
+        """Test |copy_and_check_schema| with a valid schema."""
+        schema = new_schema()
+        result = copy_and_check_schema(schema)
+
+        self.assertIsInstance(result, type(schema))
+        self.assertIsNot(result, schema)
+        self.assertEqual(result, schema)
+
+    def test_copy_and_check_schema_with_invalid_schema(self):
+        """Test |copy_and_check_schema| with an invalid schema."""
+        errors = copy_and_check_schema(BAD_SCHEMA)
+
+        self.assertIsInstance(errors, list)
         self.assertEqual(len(errors), 1)
         self.assertRegex(withloc(errors[0]), "^4:13: 'objectx' is not valid")

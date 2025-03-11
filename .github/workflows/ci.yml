@@ -17,10 +17,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version:
-          - '3.7'
           - '3.8'
           - '3.9'
           - '3.10'
+          - '3.11'
+          - '3.12'
 
     steps:
       - name: Checkout the project
@@ -47,7 +48,7 @@ jobs:
           BASEDIR=.tox/py${PYVER//.}/lib/python${PYVER}/site-packages/
           export COVERALLS_CMD="coveralls --basedir=${BASEDIR} --srcdir=src"
           tox -e py${PYVER//.}
-          if test 0${PYVER##*.} -ge 9; then
+          if test 0${PYVER##*.} -ge 10; then
             tox -e linters
           fi
 

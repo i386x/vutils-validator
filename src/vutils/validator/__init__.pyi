@@ -10,7 +10,11 @@
 from collections import deque
 from collections.abc import Sequence
 
-# Any-free type stub of jsonschema.exceptions._Error
+from typing_extensions import TypeAlias
+
+Schema: TypeAlias = dict[str, object]
+
+# Any-free type stub of `jsonschema.exceptions._Error`
 class JsonSchemaError(Exception):
     message: str
     path: deque[int | str]
